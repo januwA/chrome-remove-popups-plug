@@ -1,5 +1,4 @@
 // 标签页中的内容脚本
-console.log("remove-popups-plug start");
 let max_zIndex = 10000;
 let setIntervalDelay = 1000;
 let zIndexOverflowHistory = [];
@@ -54,3 +53,15 @@ function gotMessage(msg, sender, sendResponse) {
 // 向扩展脚本发送消息 popup.js
 // 只有打开了pupup页面，才能收到消息
 // chrome.runtime.sendMessage(chrome.runtime.id, { data: max_zIndex });
+
+
+// 尽量隐藏掉页面上的广告.
+function hidePageAds() {
+  document.querySelectorAll('*').forEach(el => {
+    let cl = Array.from(el.classList);
+    if (cl.some(clItem => /ads/ig.test(clItem))) {
+      el.style['display'] = 'none';
+    }
+  });
+};
+hidePageAds();

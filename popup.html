@@ -6,26 +6,41 @@
       .aj-content {
         width: 200pt;
       }
+      .aj-block {
+        padding: 8px;
+      }
+      .aj-center {
+        display: flex;
+        justify-content: center;
+        justify-items: center;
+      }
+      .aj-column {
+        display: flex;
+        flex-direction: column;
+      }
     </style>
   </head>
   <body>
-    <div class="aj-content">
-      <p>
-        z-index最大值：
-        <input
-          type="number"
-          placeholder="最大z-index"
-          id="js-input-zIndex"
-          autofocus
-        />
-      </p>
-      <p>
-        delay:
-        <input type="number" id="js-input-delay" placeholder=">= 0" />毫秒
-      </p>
-      <div>
-        <button id="js-ok-btn">确定</button>
-      </div>
+    <div class="aj-content aj-column">
+      <section class="aj-block">
+        <div>
+          z-index最大值(default: 10000)：
+        </div>
+        <input type="number" id="js-input-zIndex" />
+      </section>
+
+      <section class="aj-block">
+        <div>
+          delay(default:1000ms):
+        </div>
+        <input type="number" id="js-input-delay" />ms
+      </section>
+      <button id="js-ok-btn">确定</button>
+
+      <section class="aj-block aj-center">
+        <label for="adsCtrl" title="可能能会误伤!!!">清除页面内广告</label>
+        <input type="checkbox" id="adsCtrl" />
+      </section>
     </div>
     <script src="./js/popup.js"></script>
   </body>

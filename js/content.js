@@ -45,10 +45,7 @@ function startRemovePopUpsEvent() {
 }
 startRemovePopUpsEvent();
 
-function getPV(el, prop) {
-  return document.defaultView.getComputedStyle(el, null).getPropertyValue(prop);
-}
-
+// 监听后台发来的消息
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.zIndex && msg.delay) {
     clearInterval(setIntervalCtrl);
@@ -70,11 +67,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 });
 
-// 向扩展脚本发送消息 popup.js
+// 向扩展脚本(popup.js)发送消息
 // 只有打开了pupup页面，才能收到消息
 // chrome.runtime.sendMessage(chrome.runtime.id, { data: max_zIndex });
-
-// 尽量隐藏掉页面上的广告.
+/**
+ * * 尽量屏蔽掉页面上和广告字眼相关的
+ */
 function hidePageAds() {
   pageAds = [];
   document.querySelectorAll('*').forEach(el => {
@@ -87,3 +85,20 @@ function hidePageAds() {
   });
 }
 hidePageAds();
+
+/**
+ * * 干掉百度推广广告
+ * * 每两秒检查一次
+ */
+
+function removePosBaiduCom() {
+  Array.from(document.querySelectorAll('iframe'))
+    .filter(e => e.src.includes('pos.baidu.com'))
+    .forEach(e => {
+      e.remove();
+    });
+}
+
+setInterval(() => {
+  removePosBaiduCom();
+}, 2000);

@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
   "name": "Remove Pop-ups",
-  "version": "0.02",
+  "version": "0.0.3",
   "description": "隐藏页面上z-index大于一定值(default:10000)的元素.",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["js/content.js"]
+      "js": ["util/index.js", "js/content.js"]
     }
   ],
   "background": {

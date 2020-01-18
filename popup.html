@@ -37,9 +37,14 @@
       </section>
       <button id="js-ok-btn">确定</button>
 
-      <section class="aj-block aj-center">
-        <label for="adsCtrl" title="可能能会误伤!!!">清除页面内广告</label>
-        <input type="checkbox" id="adsCtrl" />
+      <section style="padding: 1em;">
+        <input
+          type="text"
+          id="js-add-input"
+          placeholder="需要移除的类名，如: .ad"
+        />
+        <button id="js-add">ADD</button>
+        <div id="js-filters"></div>
       </section>
     </div>
     <script src="./js/popup.js"></script>

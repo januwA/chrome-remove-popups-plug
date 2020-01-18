@@ -5,7 +5,7 @@ let setIntervalCtrl;
 let zIndexOverflowHistory = [];
 let pageAds = []; // 页面被隐藏的广告
 const constTypes = {
-  static: 'static',
+  static: "static"
 };
 class HistoryElement {
   constructor(el, oldDisplay) {
@@ -14,17 +14,17 @@ class HistoryElement {
   }
 
   update() {
-    this.el.style['display'] = this.oldDisplay;
+    this.el.style["display"] = this.oldDisplay;
   }
 }
 
 function removePopUpsEvent() {
-  let allElement = document.body.querySelectorAll('*');
+  let allElement = document.body.querySelectorAll("*");
   // 遍历页面上所有的元素
   for (let i = 0; i < allElement.length; i++) {
     const el = allElement[i];
-    const position = getPV(el, 'position');
-    const zIndex = getPV(el, 'z-index');
+    const position = getPV(el, "position");
+    const zIndex = getPV(el, "z-index");
     if (
       position === constTypes.static ||
       !Number.isFinite(Number(zIndex)) ||
@@ -33,9 +33,9 @@ function removePopUpsEvent() {
     ) {
       continue;
     }
-    const oldDisplay = getPV(el, 'display');
+    const oldDisplay = getPV(el, "display");
     zIndexOverflowHistory.push(new HistoryElement(el, oldDisplay));
-    el.style['display'] = 'none';
+    el.style["display"] = "none";
   }
 }
 
@@ -45,6 +45,8 @@ function startRemovePopUpsEvent() {
 }
 startRemovePopUpsEvent();
 
+// 需要移除的类名
+let filters = [];
 // 监听后台发来的消息
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.zIndex && msg.delay) {
@@ -58,47 +60,25 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     startRemovePopUpsEvent();
   }
 
-  if (msg.isDelAds) {
-    hidePageAds();
-  } else {
-    for (const el of pageAds) {
-      el.update();
-    }
+  if (msg.event === "filters") {
+    filters = msg.data;
   }
 });
 
-// 向扩展脚本(popup.js)发送消息
-// 只有打开了pupup页面，才能收到消息
-// chrome.runtime.sendMessage(chrome.runtime.id, { data: max_zIndex });
-/**
- * * 尽量屏蔽掉页面上和广告字眼相关的
- */
-function hidePageAds() {
-  pageAds = [];
-  document.querySelectorAll('*').forEach(el => {
-    let cl = Array.from(el.classList);
-    if (cl.some(clItem => /ads/gi.test(clItem))) {
-      const oldDisplay = getPV(el, 'display');
-      pageAds.push(new HistoryElement(el, oldDisplay));
-      el.style['display'] = 'none';
-    }
-  });
-}
-hidePageAds();
+setInterval(() => {
+  for (const f of filters) {
+    Array.from(document.querySelectorAll(f)).forEach(el => el.remove());
+  }
+}, 2000);
 
 /**
  * * 干掉百度推广广告
  * * 每两秒检查一次
  */
-
-function removePosBaiduCom() {
-  Array.from(document.querySelectorAll('iframe'))
-    .filter(e => e.src.includes('pos.baidu.com'))
+setInterval(() => {
+  Array.from(document.querySelectorAll("iframe"))
+    .filter(e => e.src.includes("pos.baidu.com"))
     .forEach(e => {
       e.remove();
     });
-}
-
-setInterval(() => {
-  removePosBaiduCom();
 }, 2000);
